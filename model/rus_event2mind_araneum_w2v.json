@@ -1,0 +1,67 @@
+{
+    "dataset_reader": {
+        "type": "event2mind",
+        "dummy_instances_for_vocab_generation": true,
+        "source_token_indexers": {
+            "tokens": {
+                "type": "single_id",
+                "namespace": "source_tokens"
+            }
+        },
+        "source_tokenizer": {
+            "type": "word",
+            "word_splitter": {
+                "type": "spacy"
+            }
+        }
+    },
+    "iterator": {
+        "type": "bucket",
+        "batch_size": 64,
+        "padding_noise": 0,
+        "sorting_keys": [
+            [
+                "source",
+                "num_tokens"
+            ]
+        ]
+    },
+    "model": {
+        "type": "event2mind",
+        "embedding_dropout": 0.2,
+        "encoder": {
+            "type": "gru",
+            "bidirectional": true,
+            "hidden_size": 50,
+            "input_size": 300,
+            "num_layers": 1
+        },
+        "max_decoding_steps": 10,
+        "source_embedder": {
+            "token_embedders": {
+                "tokens": {
+                    "type": "embedding",
+                    "embedding_dim": 300,
+                    "pretrained_file": "./araneum_w2v.txt",
+                    "trainable": false,
+                    "vocab_namespace": "source_tokens"
+                }
+            }
+        },
+        "target_namespace": "source_tokens"
+    },
+    "train_data_path": "./rus_train.csv",
+    "validation_data_path": "./rus_dev.csv",
+    "trainer": {
+        "cuda_device": -1,
+        "num_epochs": 20,
+        "optimizer": {
+            "type": "adam"
+        },
+        "patience": 10,
+        "validation_metric": "+xintent"
+    },
+    "vocabulary": {
+        "directory_path": "vocab_output_path_araneum/vocabulary/"
+    }
+}
