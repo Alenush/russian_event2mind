@@ -32,7 +32,7 @@ from allennlp.predictors.predictor import Predictor
 predictor = Predictor.from_path(
     "https://s3-us-west-2.amazonaws.com/allennlp/models/event2mind-2018.10.26.tar.gz"
 )
-predictor.predict(source="PersonX drops a hint")
+predictor.predict(source="PersonX пьет кофе")
 ```
 
 ### Training
